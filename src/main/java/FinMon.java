@@ -10,6 +10,7 @@ public class FinMon {
     private int monthOfBirth;
     private int yearOfBirth;
     private String inn;
+
     public FinMon(String fio, int dayOfBirth, int monthOfBirth, int yearOfBirth, String inn) {
         this.fio = fio;
         this.dayOfBirth = dayOfBirth;
@@ -18,10 +19,11 @@ public class FinMon {
         this.inn = inn;
     }
 
-    public FinMon() {}
+    public FinMon() {
+    }
 
     private static String parseFio(String fio) {
-        String[] components = fio.split(" ");
+        String[] components = fio.replace("\"", "").split(" ");
         StringBuilder result = new StringBuilder();
         for (String component : components) {
             if (component.equals("")) {
@@ -41,7 +43,7 @@ public class FinMon {
     }
 
     public static void main(String[] args) throws IOException {
-        List<FinMon> terroristList = new ArrayList<FinMon>();
+        List<FinMon> terroristList = new ArrayList<>();
         File file = new File("C:\\fm_data\\fm_data.csv");
         if (!file.exists()) {
             System.out.printf("файла с именем %s не существует\n", file.getPath());
@@ -50,34 +52,56 @@ public class FinMon {
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);
         boolean firstLine = true;
-        StringBuilder inputData = new StringBuilder(reader.readLine());
-        while (inputData != null) {
+        String fileData = reader.readLine();
+        StringBuilder inputData = new StringBuilder(fileData);
+        StringBuilder line;
+        int count, index;
+        while (fileData != null) {
             if (firstLine) {
                 firstLine = false;
-                inputData.delete(0, inputData.length() - 1).append(reader.readLine());
+                fileData = reader.readLine();
+                inputData = new StringBuilder(fileData);
                 continue;
             }
             String[] dataItems = inputData.toString().split(";");
-            if (dataItems.length < 7) {
-                inputData.append(reader.readLine());
-                dataItems = inputData.toString().split(";");
-                if (dataItems.length < 7) {
-                    inputData.append(reader.readLine());
-                    dataItems = inputData.toString().split(";");
-                    if (dataItems.length < 7) {
-                        System.out.println("Неверный формат данных в строке " + dataItems[0]);
-                        System.exit(255);
+            if (dataItems.length < 4) {
+                count = 6; //Количество попыток дочитать строку
+                while (count > 0) {
+                    fileData = reader.readLine();
+                    line = new StringBuilder(fileData);
+                    index = line.indexOf("\"");
+                    if (index != -1) { //встретили закрывающуюся кавычку
+                        inputData.append(line.substring(index + 1));
+                        dataItems = inputData.toString().split(";");
+                        break;
+                    } else {
+                        index = line.indexOf(";");
+                        if (index != -1) { //пошли данные следующего лица
+                            System.out.println("Неверный формат данных в строке: " + inputData);
+                            inputData = new StringBuilder(line);
+                            dataItems = inputData.toString().split(";");
+                            break;
+                        }
                     }
+                    count--;
                 }
 
+                if (count == 0) { //не удалось найти логическое окончание данных лица
+                    System.out.println("Неверное логическое окончание данных в строке: " + inputData);
+                    fileData = reader.readLine();
+                    inputData = new StringBuilder(fileData);
+                    continue;
+                }
             }
             String fio = parseFio(dataItems[1]);
-            System.out.println("fio = " + fio);
-            inputData.delete(0, inputData.length() - 1).append(reader.readLine());
+            System.out.println(dataItems[0] + " fio = " + fio);
+            fileData = reader.readLine();
+            if (fileData == null) break;
+            inputData = new StringBuilder(fileData);
         }
-
+        fileReader.close();
+        reader.close();
     }
 }
-
 
 
