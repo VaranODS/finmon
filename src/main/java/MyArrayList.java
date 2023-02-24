@@ -8,7 +8,7 @@ public class MyArrayList<T> {
  *     remove(index)
  *     isEmpty()
  *     contains(item)
- *     length()
+ *     size()
  *     reservedLength()
  *     clear()
 */
