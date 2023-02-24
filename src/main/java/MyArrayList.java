@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
@@ -74,7 +73,7 @@ public class MyArrayList<T> {
         return false;
     }
 
-    public int length() {
+    public int size() {
         return index + 1;
     }
 
@@ -114,13 +113,15 @@ public class MyArrayList<T> {
         System.out.println("myList = " + myList);
         myList.add(-10);
         System.out.println("myList = " + myList);
-        System.out.println("myList.length() = " + myList.length());
+        System.out.println("myList.length() = " + myList.size());
         System.out.println("myList.get(4) = " + myList.get(4));
         System.out.println("myList.reservedLength() = " + myList.reservedLength());
         System.out.println("myList.remove(3) = " + myList.remove(3));
         System.out.println("myList = " + myList);
-        System.out.println("myList.length() = " + myList.length());
+        System.out.println("myList.size() = " + myList.size());
+        System.out.println("myList.isEmpty() = " + myList.isEmpty());
         myList.clear();
         System.out.println("myList = " + myList);
+        System.out.println("myList.isEmpty() = " + myList.isEmpty());
     }
 }
