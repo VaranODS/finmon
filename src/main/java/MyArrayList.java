@@ -101,7 +101,6 @@ public class MyArrayList<T> {
         System.out.println("myList.isEmpty() = " + myList.isEmpty());
 
         System.out.println("myList = " + myList);
-
         myList.add(15);
         System.out.println("myList = " + myList);
         myList.add(7);

@@ -27,7 +27,7 @@ public class MyQueue<T> {
         items = new Object[items.length];
     }
 
-    public boolean add(Object e) {
+    public boolean add(T e) {
         if (size == items.length) {
             return false;
         }

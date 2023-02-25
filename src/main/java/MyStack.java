@@ -15,7 +15,7 @@ public class MyStack<T> {
         stackData = new Object[stackSize];
     }
 
-    public boolean push(Object value) {
+    public boolean push(T value) {
         if (index == stackData.length - 1) return false;
         stackData[++index] = value;
         return true;
